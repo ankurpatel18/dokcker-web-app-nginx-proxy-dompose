@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  appserver:
+    image: app:latest
+    restart: always
+    expose: 
+      - 3000
+    container_name: appserver
+  webserver:
+    image: web:latest
+    expose:
+      - 80
+    restart: always
+    container_name: webserver
+    environment:
+       VIRTUAL_HOST: hello.ankurpatel18.com
+    links:
+      - appserver:appserver
+networks:
+  default:
+    external:
+      name: nginx-proxy

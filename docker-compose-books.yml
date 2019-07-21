@@ -1,0 +1,23 @@
+version: "3"
+
+services:  
+  appserver1:
+    image: app:latest
+    restart: always
+    expose: 
+      - 3000
+    container_name: appserver1
+  webserver1:
+    image: web:latest
+    expose:
+      - 80
+    restart: always
+    container_name: webserver1
+    environment:
+       VIRTUAL_HOST: books.ankurpatel18.com
+    links:
+      - appserver1:appserver1
+networks:
+  default:
+    external:
+      name: nginx-proxy

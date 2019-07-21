@@ -1,0 +1,20 @@
+Normal 
+docker run -d -p 80:80  --name webserver web
+docker run -d -p 3000:3000 --name appserver app 
+
+With Link of running server
+docker run -d -p 8000:80 --link appserver --name webserver web
+
+
+
+With Nginx proxy and link
+docker run -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy:alpine
+docker run -d -p 3000:3000 --name appserver app
+docker run -d --name webserver --expose 80 --link appserver:app -e VIRTUAL_HOST=hello.ankurpatel18.com web
+docker run -d --name bookwebserver --expose 80 --link appserver:app -e VIRTUAL_HOST=books.ankurpatel18.com web
+
+
+
+
+docker run -d --expose 3000 --name appserver app 
+docker run -d -p 80:80 --link appserver --name webserver web
