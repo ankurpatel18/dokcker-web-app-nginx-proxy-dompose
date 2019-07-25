@@ -1,27 +1,30 @@
 version: "3"
 
 services:
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
-    ports:
-      - "80:80"
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
   appserver:
-    image: app:latest
+    build: ./server/.
+    image: helloworldapp:latest
     restart: always
     expose: 
-      - 3000
-    container_name: appserver
-  webserver:
-    image: web:latest
-    expose:
+      - 5050
+    environment:
+        APP_PORT: 5050
+    container_name: helloworld-app
+  webserver:  
+    build: 
+      context: ./client/
+      dockerfile: Dockerfile
+      args:
+        - deployenv=prod
+        - appserverurl=helloworld-app
+        - appserverport=5050
+    image: helloworldweb:latest
+    expose: 
       - 80
     restart: always
-    container_name: webserver
+    container_name: helloworld-web
     environment:
-       VIRTUAL_HOST: hello.ankurpatel18.com
+      VIRTUAL_HOST: dockertest.ankur.com
     links:
       - appserver:appserver
 networks:

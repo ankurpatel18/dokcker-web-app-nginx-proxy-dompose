@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EnvService } from './env.service';
+import { environment } from 'src/environments/environment';
 
 
 const httpOptions = {
@@ -14,12 +14,10 @@ const httpOptions = {
 
 export class AppService {
 
-  private getBooksUrl = 'http://localhost/books'
+  private getBooksUrl = '';
 
-  constructor( private http: HttpClient, private env:EnvService) {
-    if(env.apiUrl != null){
-      this.getBooksUrl = env.apiUrl + '/books';
-    }
+  constructor( private http: HttpClient) {
+    this.getBooksUrl = environment.API_URL + '/books';
    }
 
   getBooks (): Observable<any[]> {

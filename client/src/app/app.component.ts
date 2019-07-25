@@ -11,7 +11,6 @@ export class AppComponent {
 
   books = [];
   constructor(private appService:AppService){
-
   }
   ngOnInit(): void {
 
